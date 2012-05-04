@@ -62,13 +62,17 @@ module Webrat
     end
 
     def http_method
-      if !onclick.blank? && onclick.include?("f.submit()")
+      if !@element["data-method"].blank?
+        @element["data-method"]
+      elsif !onclick.blank? && onclick.include?("f.submit()")
         http_method_from_js_form
       else
         :get
       end
     end
 
+    # added patch from https://github.com/bluetools/webrat/commit/afc4599dbecf05fa7d3f209a768ff4328692d55a
+    # to make it work with rails 3 and its data-method
     def http_method_from_js_form
       if onclick.include?("m.setAttribute('name', '_method')")
         http_method_from_fake_method_param
