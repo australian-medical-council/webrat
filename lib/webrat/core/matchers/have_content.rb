@@ -8,7 +8,7 @@ module Webrat
 
       def matches?(stringlike)
         @document = Webrat::XML.document(stringlike)
-        @element = @document.inner_text
+        @element = @document.inner_text.gsub(/\xc2\xa0/u, ' ')   # replace non-breaking spaces
 
         case @content
         when String
